@@ -2,8 +2,10 @@ name: Build exe
 
 on:
   push:
-    branches: [main]
-    tags: [«v*»]
+    branches:
+      - main
+    tags:
+      - v*
   workflow_dispatch:
 
 permissions:
@@ -16,15 +18,15 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
         with:
-          python-version: «3.12»
+          python-version: 3.12
       - run: pip install pyinstaller
-      - run: pyinstaller —onefile —windowed —name PapaName papa_name.py
+      - run: pyinstaller --onefile --windowed --name PapaName papa_name.py
       - uses: actions/upload-artifact@v4
         with:
           name: PapaName
           path: dist/PapaName.exe
       - name: Publish release
-        if: startsWith(github.ref, ‘refs/tags/v’)
+        continue-on-error: true
         uses: softprops/action-gh-release@v2
         with:
           files: dist/PapaName.exe
